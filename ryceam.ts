@@ -1,7 +1,7 @@
 import * as xlsx from "xlsx";
 import { WikiWiki } from "./wikiwiki";
 
-const WIKI_NAME = process.env.WIKI_NAME || "example";
+const WIKI_NAME = "ryceam";
 const PASSWORD = process.env.PASSWORD || "password";
 const EXCEPTIONS = [
   {
@@ -9,7 +9,7 @@ const EXCEPTIONS = [
     after: "Spacecture void",
   },
 ];
-const IGNORED_PAGES = ["Microcosm Blowup", "+ERABY+E CONNEC+10N"];
+const IGNORED_PAGES = ["Microcosm Blowup", "+ERABY+E CONNEC+10N", "MIRЯOЯ"];
 const CHAPTERS = {
   "Beginner / 薄明り": "Beginner",
   "Prelude / 鏡の間": "Prelude",
@@ -19,10 +19,12 @@ const CHAPTERS = {
   "Subject Cosmos / 太初の夜": "Subject_Cosmos",
   "Subject Kawaii / レモン清夏": "Subject_Kawaii",
   "Subject Elec / 掣電一閃": "Subject_Elec",
+  "Subject Spring / 重錦韶光": "Subject_Spring",
   "Subject Mix / シングル": "Subject_Mix",
-  "Collaboration I / 次元LAB": "Collaboration_I",
-  "Collaboration II / DANCE CUBE": "Collaboration_II",
-  "Collaboration III / SONIC SURGE II": "Collaboration_III",
+  "Collaboration I / 次元LAB": "Dimension_LAB",
+  "Collaboration II / DANCE CUBE": "DANCE_CUBE",
+  "Collaboration III / MUSYNC": "MUSYNC",
+  "Collaboration III / SONIC SURGE II": "SONIC_SURGE_II",
   "Legacy / 過去の章": "Legacy",
 } as {
   [key: string]: string;
@@ -98,7 +100,7 @@ ${data["Easy"] ? `** &color(orange){Easy}; [#Easy]` : ""}${
 function updateWikiContent(source: string, data: any): string {
   const lines = source.split("\n");
   const difficultyRegex =
-    /\|~\|~&color\([A-Za-z]+\)\{[A-Za-z]+\};\|\d\|[0-9]+\|.+\|/;
+    /\|~\|~&color\([A-Za-z]+\)\{[A-Za-z]+\};\|[0-9]+\|[0-9]+\|.+\|/;
   const updatedLines = lines.map((line) => {
     if (line.startsWith("|~Composer|")) {
       return `|~Composer|>|>|>|${data["コンポーザー"]}|`;
@@ -156,13 +158,16 @@ async function main() {
 
     const excelData = readExcel("ryceam.xlsx");
     console.log("Loaded Excel data.");
-
+    const targetChapters = ["Subject Spring / 重錦韶光"];
     for (const row of excelData) {
       const replacedName: string = EXCEPTIONS.reduce(
         (acc, exception) => acc.replace(exception.before, exception.after),
         row["曲名"]
       );
       if (IGNORED_PAGES.includes(replacedName)) {
+        continue;
+      }
+      if (!targetChapters.includes(row["チャプター"])) {
         continue;
       }
       if (existingPages.includes(replacedName)) {

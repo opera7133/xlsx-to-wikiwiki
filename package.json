@@ -1,6 +1,6 @@
 {
   "name": "xlsx-to-wikiwiki",
-  "module": "index.ts",
+  "module": "ryceam.ts",
   "type": "module",
   "license": "Apache-2.0",
   "devDependencies": {
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
     "xlsx": "^0.18.5"
   }
 }
