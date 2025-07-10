@@ -14,6 +14,11 @@ const CHAPTERS = {
   "章节一 / Sotto voce": "chap1",
   "章节二 / Variazione": "chap2",
   "章节三 / Fortepiano": "chap3",
+  "精选集 / Flexible X": "flexible-x",
+  "联动集 / Vtuber": "vtuber",
+  "终旋协音 / Fruition Hexachord": "fruition",
+  "精选集 / Se-U-Ra": "se-u-ra",
+  "联动集 / Kalpa": "kalpa",
   "联动集 / Notanote": "notanote",
   "炫光动感 / Dynamix": "dynamix",
   "联动集 / DanceRail3": "dancerail3",
@@ -207,7 +212,7 @@ async function main() {
     const excelData = readExcel("berrymelody.xlsx");
     console.log("Loaded Excel data.");
 
-    const targetChapters = ["単曲 / Ayira's Suitcase"];
+    const targetChapters = ["精选集 / Flexible X"];
 
     for (const row of excelData) {
       const replacedName: string = EXCEPTIONS.reduce(
@@ -224,7 +229,10 @@ async function main() {
       if (existingPages.includes(replacedName)) {
         const source = await wiki.getPage(replacedName);
         const updatedSource = updateWikiContent(source, row);
-        await wiki.updatePage(replacedName, updatedSource);
+        //await wiki.updatePage(replacedName, updatedSource);
+        console.log("--------------------");
+        console.log(generateWikiContent(row));
+        console.log("--------------------");
         console.log(`Updated page: ${replacedName}`);
       } else {
         const source = generateWikiContent(row);
